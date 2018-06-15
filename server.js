@@ -111,6 +111,32 @@ app.delete('/recipes/:id', (req, res) => {
   res.status(204).end();
 });
 
+
+//put test which is to update
+
+app.put('/recipes/:id', jsonParser, (req, res)=>{
+    const requiredKeys = ["name", "ingredients"];
+    for(let i = 0; i < requiredKeys.length; i++){
+        const keys = requiredKeys[i];
+    if(!(keys in req.body)){
+        const message = `Missing \`${keys}\` in request body`
+        console.error(message);
+        return res.status(400).send(message);
+        }
+    }
+    if(req.params.id !== req.body.id){
+       res.status(404); 
+    }
+    Recipes.update({
+        id: req.params.id,
+        name: req.body.name,
+        ingredients: req.body.ingredients 
+    })
+    res.status(204);
+})
+
+
+
 app.listen(process.env.PORT || 8080, () => {
   console.log(`Your app is listening on port ${process.env.PORT || 8080}`);
 });
